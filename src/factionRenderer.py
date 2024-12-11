@@ -8,12 +8,12 @@ from pprint import pp
 
 
 #environment = Environment(loader=FileSystemLoader("../templates/"))
-environment = Environment(loader=FileSystemLoader("/home/runner/work/wiki-actions-poc/wiki-actions-poc/wiki-gen-poc/templates/"))
+environment = Environment(loader=FileSystemLoader("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/wiki-gen/templates/"))
 template = environment.get_template("factionStore.tpl")
 
 # Needs to be changed for GitAction Implementation
 #codebase_dir = "../../BattleTech-Advanced/"
-codebase_dir = "/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta"
+codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
 
 def render_factionstore(faction, items):
     faction_name = faction[:-5]
@@ -127,7 +127,7 @@ def get_faction_specific_info(faction):
 
 if __name__ == "__main__":
     #results = factionParser.process_files("../DynamicShops/fshops", "itemCollection_")
-    results = factionParser.process_files("/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta/DynamicShops/fshops", "itemCollection_")
+    results = factionParser.process_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/fshops", "itemCollection_")
     #pp(results)
     for faction,items in results.items():
         render_factionstore(faction, items)

@@ -7,12 +7,12 @@ import genUtilities
 from pprint import pp
 
 
-environment = Environment(loader=FileSystemLoader("/home/runner/work/wiki-actions-poc/wiki-actions-poc/wiki-gen-poc/templates/"))
+environment = Environment(loader=FileSystemLoader("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/wiki-gen/templates/"))
 #environment = Environment(loader=FileSystemLoader("../templates/"))
 template = environment.get_template("factory.tpl")
 
 # Needs to be changed for GitAction Implementation
-codebase_dir = "/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta"
+codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
 #codebase_dir = "../../BattleTech-Advanced/"
 
 def render_factoryentry(planet, owner, rep, collection): 
@@ -89,7 +89,7 @@ def render_factoryentry(planet, owner, rep, collection):
 
 if __name__ == "__main__":
     results = factoryParser.process_files("../DynamicShops/sshops")
-    #results = factoryParser.process_files("/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta/DynamicShops/fshops", "itemCollection_")
+    #results = factoryParser.process_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta//DynamicShops/sshops")
     pp(results)
     for planet,items in results.items():
         #print("The planet ", planet, " is owned by ", items.get('owner'), "and with reputation ", items.get('rep'), " you can buy ", items.get('items'))

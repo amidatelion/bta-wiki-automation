@@ -2,7 +2,7 @@ import os
 import requests
 import json
 
-codebase_dir = "/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta"
+codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
 #codebase_dir = "../../BattleTech-Advanced/"
 
 # deeply ugly login function
