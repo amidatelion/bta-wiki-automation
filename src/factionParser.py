@@ -12,7 +12,7 @@ def process_Faction_Collection(file_path):
 
 def process_files(primary_path, prefix):
     file_dict = {}
-    csv_files_index = genUtilities.index_csv_files("/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta/DynamicShops/")
+    csv_files_index = genUtilities.index_csv_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/")
     #csv_files_index = genUtilities.index_csv_files(["../DynamicShops/"])
     # Iterate through files in primary path and process each
     for file_name in os.listdir(primary_path):

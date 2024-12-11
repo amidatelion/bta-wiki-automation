@@ -8,7 +8,7 @@ prefixes = ["itemCollection_", "BTA_List_"]
 
 def process_files(primary_path):
     factory_dict = {}
-    csv_files_index = genUtilities.index_csv_files("/home/runner/work/wiki-actions-poc/wiki-actions-poc/bta/DynamicShops/")
+    csv_files_index = genUtilities.index_csv_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/")
     #csv_files_index = genUtilities.index_csv_files(["../DynamicShops/", "../Community Content/"])
     # Iterate through files in primary path and process each
     for file_name in os.listdir(primary_path):
