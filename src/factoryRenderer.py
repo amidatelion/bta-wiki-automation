@@ -88,8 +88,8 @@ def render_factoryentry(planet, owner, rep, collection):
    #    print(f"... wrote {results_filename}")
 
 if __name__ == "__main__":
-    results = factoryParser.process_files("../DynamicShops/sshops")
-    #results = factoryParser.process_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta//DynamicShops/sshops")
+    #results = factoryParser.process_files("../DynamicShops/sshops")
+    results = factoryParser.process_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/sshops")
     pp(results)
     for planet,items in results.items():
         #print("The planet ", planet, " is owned by ", items.get('owner'), "and with reputation ", items.get('rep'), " you can buy ", items.get('items'))
