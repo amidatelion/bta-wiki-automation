@@ -8,7 +8,7 @@ prefixes = ["itemCollection_", "ItemCollection_", "BTA_"]
 
 def process_files(primary_path):
     factory_dict = {}
-    csv_files_index = genUtilities.index_csv_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/")
+    csv_files_index = genUtilities.index_csv_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/", "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/Community Content/")
     #csv_files_index = genUtilities.index_csv_files(["../DynamicShops/", "../Community Content/"])
     # Iterate through files in primary path and process each
     for file_name in os.listdir(primary_path):
@@ -18,9 +18,9 @@ def process_files(primary_path):
             if file_name.startswith("factories"):
                 process_Factory_Collections(full_path, factory_dict)
     for location, data in factory_dict.items():
-        #print("this is the location:", location)
+        collection_name = data.get("item_list")
         if "items" in data:
-            data["items"] = add_factory_contents(data["items"], csv_files_index, factory_dict, prefixes)
+            data["items"] = add_factory_contents(collection_name, csv_files_index, data["items"], factory_dict, prefixes)
 
     return factory_dict
 
@@ -36,7 +36,8 @@ def process_Factory_Collections(full_path, factory_dict):
                 factory_dict[name] = {
                     "owner": conditions.get("owner", None),
                     "rep": conditions.get("rep", None),
-                    "items": block.get("items", None)  # Safely fetch 'items'
+                    "item_list": block.get("items", None),  # Safely fetch 'items'
+                    "items": []
                 }
                 #print("this is the factory dict:\r\n", factory_dict)
             #print("this is the factory dict:\r\n", factory_dict)
@@ -45,11 +46,9 @@ def process_Factory_Collections(full_path, factory_dict):
     #pp(factory_dict)
     return factory_dict
 
-def add_factory_contents(collection_name, csv_files_index, file_dict, prefixes):
-        item_collection_list = []
+def add_factory_contents(collection_name, csv_files_index, item_collection_list, factory_dict, prefixes):
         # Read file and get its contents
         csv_files_index[collection_name]
-        #print(csv_files_index[collection_name])
         with open(csv_files_index[collection_name], 'r') as file:
             lines = file.readlines()
         # Skip the first line
@@ -58,7 +57,7 @@ def add_factory_contents(collection_name, csv_files_index, file_dict, prefixes):
         for line in lines:
             line = line.split(",")
             if line[0].startswith(tuple(prefixes)):
-                add_factory_contents(line[0], csv_files_index, file_dict, prefixes)
+                add_factory_contents(line[0], csv_files_index, item_collection_list, factory_dict, prefixes)
             else: 
                 item_collection_list.append(line[0])
         return item_collection_list
