@@ -4,7 +4,7 @@ import json
 from pprint import pp
 import genUtilities
 
-prefixes = ["itemCollection_", "BTA_List_"]
+prefixes = ["itemCollection_", "ItemCollection_", "BTA_"]
 
 def process_files(primary_path):
     factory_dict = {}
@@ -62,20 +62,6 @@ def add_factory_contents(collection_name, csv_files_index, file_dict, prefixes):
             else: 
                 item_collection_list.append(line[0])
         return item_collection_list
-
-def index_csv_files(directories):
-    csv_files = {}
-    
-    # Walk through directories recursively
-    for directory in directories:
-        for root, _, files in os.walk(directory):
-            for file in files:
-                # Check if the file ends with .csv
-                if file.endswith('.csv'):
-                    # Append the full file path to the list
-                    csv_files[file[:-4]]=os.path.join(root, file)
-    
-    return csv_files
 
 if __name__ == "__main__":
     result = process_files(sys.argv[1])
