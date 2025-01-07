@@ -3,15 +3,15 @@ import sys
 import json
 from pprint import pp
 import genUtilities
+from settings import *
 
 prefixes = ["itemCollection_", "ItemCollection_", "BTA_"]
+csv_dir_list = [bta_dir + "DynamicShops/", bta_dir + "Community Content/", bta_dir + "Flashpoint Unit Module/",
+    bta_dir + "Heavy Metal Unit Module/", bta_dir + "Urban Warfare Unit Module"]
 
 def process_files(primary_path):
     factory_dict = {}
-    csv_files_index = genUtilities.index_csv_files(["/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/", 
-    "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/Community Content/", "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/Flashpoint Unit Module/",
-    "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/Heavy Metal Unit Module/"])
-    #csv_files_index = genUtilities.index_csv_files(["../DynamicShops/", "../Community Content/"])
+    csv_files_index = genUtilities.index_csv_files(csv_dir_list)
     # Iterate through files in primary path and process each
     for file_name in os.listdir(primary_path):
         full_path = os.path.join(primary_path, file_name)

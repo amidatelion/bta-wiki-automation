@@ -5,15 +5,9 @@ import requests
 import factionParser
 import genUtilities
 from pprint import pp
+from settings import *
 
-
-#environment = Environment(loader=FileSystemLoader("../templates/"))
-environment = Environment(loader=FileSystemLoader("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/wiki-gen/templates/"))
 template = environment.get_template("factionStore.tpl")
-
-# Needs to be changed for GitAction Implementation
-#codebase_dir = "../../BattleTech-Advanced/"
-codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
 
 def render_factionstore(faction, items):
     faction_name = faction[:-5]

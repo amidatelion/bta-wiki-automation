@@ -5,15 +5,9 @@ import requests
 import factoryParser
 import genUtilities
 from pprint import pp
+from settings import *
 
-
-environment = Environment(loader=FileSystemLoader("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/wiki-gen/templates/"))
-#environment = Environment(loader=FileSystemLoader("../templates/"))
 template = environment.get_template("factory.tpl")
-
-# Needs to be changed for GitAction Implementation
-codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
-#codebase_dir = "../../BattleTech-Advanced/"
 
 def render_factoryentry(planet, owner, rep, collection): 
     
@@ -60,7 +54,6 @@ def render_factoryentry(planet, owner, rep, collection):
         contracts[index] = genUtilities.get_display_name(item)
     
     for index, item in enumerate(mechs):
-        #print("Printing out mechsindex:", mechs[index])
         mechs[index] = '#'.join(item.rsplit(' ', 1)) + '|' + item
     for index, item in enumerate(vehicles):
         vehicles[index] = '#'.join(item.rsplit(' ', 1)) + '|' + item
@@ -78,14 +71,16 @@ def render_factoryentry(planet, owner, rep, collection):
         "contracts": contracts,
     }
 
-    # Wiki page writing
-    page_title = "Template:Factory_" + planet_name
-    genUtilities.post_to_wiki(page_title, template.render(context))
-
-    # Local file writing
-   # with open(results_filename, mode="w", encoding="utf-8") as results:
-   #    results.write(template.render(context))
-   #    print(f"... wrote {results_filename}")
+    
+    if "GITHUB_ACTIONS" in os.environ:
+        # Wiki page writing
+        page_title = "Template:Factory_" + planet_name
+        genUtilities.post_to_wiki(page_title, template.render(context))
+    else:
+        # Local file writing
+        with open(results_filename, mode="w", encoding="utf-8") as results:
+            results.write(template.render(context))
+            print(f"... wrote {results_filename}")
 
 if __name__ == "__main__":
     #results = factoryParser.process_files("../DynamicShops/sshops")

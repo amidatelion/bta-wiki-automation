@@ -1,9 +1,7 @@
 import os
 import requests
 import json
-
-codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
-#codebase_dir = "../../BattleTech-Advanced/"
+from settings import *
 
 # deeply ugly login function
 def post_to_wiki(page_title, page_content):
@@ -95,7 +93,7 @@ def index_csv_files(directories):
 
 
 def get_display_name(item):
-    for root, dirs, files in os.walk(codebase_dir):
+    for root, dirs, files in os.walk(bta_dir):
         for file in files:
             # Check if the file is the target JSON file
             if file == item+".json":
