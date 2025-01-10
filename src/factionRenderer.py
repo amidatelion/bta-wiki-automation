@@ -5,15 +5,9 @@ import requests
 import factionParser
 import genUtilities
 from pprint import pp
+from settings import *
 
-
-#environment = Environment(loader=FileSystemLoader("../templates/"))
-environment = Environment(loader=FileSystemLoader("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/wiki-gen/templates/"))
 template = environment.get_template("factionStore.tpl")
-
-# Needs to be changed for GitAction Implementation
-#codebase_dir = "../../BattleTech-Advanced/"
-codebase_dir = "/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta"
 
 def render_factionstore(faction, items):
     faction_name = faction[:-5]
@@ -58,7 +52,6 @@ def render_factionstore(faction, items):
         contracts[index] = genUtilities.get_display_name(item)
     
     for index, item in enumerate(mechs):
-        #print("Printing out mechsindex:", mechs[index])
         mechs[index] = '#'.join(item.rsplit(' ', 1)) + '|' + item
     for index, item in enumerate(vehicles):
         vehicles[index] = '#'.join(item.rsplit(' ', 1)) + '|' + item
@@ -74,13 +67,15 @@ def render_factionstore(faction, items):
         "contracts": contracts,
     }
 
-    # Wiki page writing
-    page_title = "Template:FS" + faction_name
-    genUtilities.post_to_wiki(page_title, template.render(context))
-    # Local file writing
-    #with open(results_filename, mode="w", encoding="utf-8") as results:
-    #    results.write(template.render(context))
-    #    print(f"... wrote {results_filename}")
+    if "GITHUB_ACTIONS" in os.environ:
+        # Wiki page writing
+        page_title = "Template:FS" + faction_name
+        genUtilities.post_to_wiki(page_title, template.render(context))
+    else:
+        # Local file writing
+        with open(results_filename, mode="w", encoding="utf-8") as results:
+            results.write(template.render(context))
+            print(f"... wrote {results_filename}")
 
 def get_faction_specific_info(faction):
     # This unfortunately needs to be maintained manually
@@ -127,7 +122,7 @@ def get_faction_specific_info(faction):
 
 if __name__ == "__main__":
     #results = factionParser.process_files("../DynamicShops/fshops", "itemCollection_")
-    results = factionParser.process_files("/home/runner/work/BattleTech-Advanced/BattleTech-Advanced/bta/DynamicShops/fshops", "itemCollection_")
+    results = factionParser.process_files(bta_dir + "DynamicShops/fshops", "itemCollection_")
     #pp(results)
     for faction,items in results.items():
         render_factionstore(faction, items)
