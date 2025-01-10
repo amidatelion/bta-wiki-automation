@@ -79,16 +79,19 @@ def post_to_wiki(page_title, page_content):
     
 def index_csv_files(directories):
     csv_files = {}
-    
     # Walk through directories recursively
     for directory in directories:
         for root, _, files in os.walk(directory):
             for file in files:
                 # Check if the file ends with .csv
                 if file.endswith('.csv'):
-                    # Append the full file path to the list
-                    csv_files[file[:-4]]=os.path.join(root, file)
-    
+                    file_name = file[:-4]
+                    full_path = os.path.join(root, file)
+                    # Add the file path to the list for this file name
+                    if file_name in csv_files:
+                        csv_files[file_name].append(full_path)
+                    else:
+                        csv_files[file_name] = [full_path]
     return csv_files
 
 
