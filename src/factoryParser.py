@@ -6,8 +6,6 @@ import genUtilities
 from settings import *
 
 prefixes = ["itemCollection_", "ItemCollection_", "BTA_"]
-csv_dir_list = [bta_dir + "DynamicShops/", bta_dir + "Community Content/", bta_dir + "Flashpoint Unit Module/",
-    bta_dir + "Heavy Metal Unit Module/", bta_dir + "Urban Warfare Unit Module"]
 
 def process_files(primary_path):
     factory_dict = {}

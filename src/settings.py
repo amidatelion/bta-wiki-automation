@@ -9,3 +9,6 @@ else:
     jinja_dir = "../templates/"
 
 environment = Environment(loader=FileSystemLoader(jinja_dir))
+
+csv_dir_list = [bta_dir + "DynamicShops/", bta_dir + "Community Content/", bta_dir + "Flashpoint Unit Module/",
+    bta_dir + "Heavy Metal Unit Module/", bta_dir + "Urban Warfare Unit Module"]
