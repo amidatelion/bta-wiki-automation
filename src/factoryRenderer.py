@@ -8,6 +8,23 @@ from pprint import pp
 from settings import *
 
 template = environment.get_template("factory.tpl")
+session, csrf_token = genUtilities.create_wiki_session()
+
+def check_factory_page(session, planet):
+    planet_url = planet.replace(" ", "_")
+    check_resp = session.post(api_url, data={
+	"action": "query",
+	"format": "json",
+	"prop": "revisions",
+	"titles": "Factory_Worlds",
+	"formatversion": "2",
+	"rvprop": "content",
+	"rvslots": "*"
+    })
+    data = check_resp.json()
+    data = json.dumps(data)
+    return planet_url in data
+    
 
 def render_factoryentry(planet, owner, rep, collection): 
     
@@ -70,22 +87,23 @@ def render_factoryentry(planet, owner, rep, collection):
         "battlearmors": battlearmors,
         "contracts": contracts,
     }
-
     
-    if "GITHUB_ACTIONS" in os.environ:
+    if "GITHUB_ACTIONS" in os.environ or "LOCAL_OVERRIDE" in os.environ:
         # Wiki page writing
         page_title = "Template:Factory_" + planet_name
-        genUtilities.post_to_wiki(page_title, template.render(context))
+        genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
+        if not check_factory_page(session, planet_name):
+            print("Factory entry not found on Factory Worlds page and needs to be added: ", planet_name)
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:
             results.write(template.render(context))
-            print(f"... wrote {results_filename}")
+            #print(f"... wrote {results_filename}")
 
 if __name__ == "__main__":
     #results = factoryParser.process_files("../DynamicShops/sshops")
     results = factoryParser.process_files(bta_dir + "DynamicShops/sshops")
-    pp(results)
+    #pp(results)
     for planet,items in results.items():
         #print("The planet ", planet, " is owned by ", items.get('owner'), "and with reputation ", items.get('rep'), " you can buy ", items.get('items'))
         render_factoryentry(planet, items.get("owner"), items.get("rep"), items.get("items"))   
