@@ -3,24 +3,10 @@ import requests
 import json
 from settings import *
 
-# deeply ugly login function
-def post_to_wiki(page_title, page_content):
-    """
-    Posts content to a specified page on a MediaWiki site.
+def create_wiki_session():
 
-    Parameters:
-        page_title (str): The title of the MediaWiki page to edit or create.
-        page_content (str): The content to post to the page.
-
-    Returns:
-        bool: True if the page was successfully posted, False otherwise.
-    """
-    # Load credentials from environment variables
     username = os.getenv("WIKI_USER")
     password = os.getenv("WIKI_PASS")
-
-    # Define the MediaWiki API endpoint
-    api_url = "https://www.bta3062.com/api.php"
 
     # Ensure username and password are set
     if not username or not password:
@@ -36,6 +22,7 @@ def post_to_wiki(page_title, page_content):
         "type": "login",
         "format": "json"
     })
+
     login_token = login_token_resp.json()["query"]["tokens"]["logintoken"]
 
     # Step 2: Log in to the MediaWiki API
@@ -49,8 +36,7 @@ def post_to_wiki(page_title, page_content):
 
     # Check if login was successful
     if login_resp.json().get("login", {}).get("result") != "Success":
-        print("Login failed:", login_resp.json())
-        return False
+        raise Exception("Login failed: " + str(login_resp.json()))
 
     # Step 3: Fetch the CSRF token for editing
     csrf_token_resp = session.get(api_url, params={
@@ -60,6 +46,9 @@ def post_to_wiki(page_title, page_content):
     })
     csrf_token = csrf_token_resp.json()["query"]["tokens"]["csrftoken"]
 
+    return session, csrf_token
+
+def post_to_wiki(session, csrf_token, page_title, page_content):
     # Step 4: Make the POST request to edit the page
     edit_resp = session.post(api_url, data={
         "action": "edit",
@@ -71,11 +60,11 @@ def post_to_wiki(page_title, page_content):
 
     # Check if the edit was successful
     if edit_resp.json().get("edit", {}).get("result") == "Success":
-        print(f"... successfully posted to '{page_title}' on the MediaWiki")
         return True
     else:
-        print("Failed to edit page:", edit_resp.json())
+        print(f"Failed to edit page '{page_title}':", edit_resp.json())
         return False
+
     
 def index_csv_files(directories):
     csv_files = {}

@@ -8,6 +8,7 @@ from pprint import pp
 from settings import *
 
 template = environment.get_template("factionStore.tpl")
+session, csrf_token = genUtilities.create_wiki_session()
 
 def render_factionstore(faction, items):
     faction_name = faction[:-5]
@@ -67,10 +68,10 @@ def render_factionstore(faction, items):
         "contracts": contracts,
     }
 
-    if "GITHUB_ACTIONS" in os.environ:
+    if "GITHUB_ACTIONS" in os.environ or "LOCAL_OVERRIDE" in os.environ:
         # Wiki page writing
         page_title = "Template:FS" + faction_name
-        genUtilities.post_to_wiki(page_title, template.render(context))
+        genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:
