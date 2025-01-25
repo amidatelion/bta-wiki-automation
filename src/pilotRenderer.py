@@ -15,7 +15,7 @@ def render_pilot_entry(pilot):
     pilottags = {key: value for key, value in pilot_info.items() if key.startswith('pilottag')}
     sorted_tags = dict(sorted(pilottags.items()))
     formatted_string = "".join(f"|{key} = {value}\n" for key, value in sorted_tags.items())
-    pp(pilot_info)
+    #pp(pilot_info)
     callsign = pilot_info.get("callsign")
     results_filename = "Pilot_" + callsign + ".wiki"
 
@@ -40,8 +40,6 @@ def render_pilot_entry(pilot):
         # Wiki page writing
         page_title = "Template:Pilot_" + callsign
         genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
-        #if not check_factory_page(session, planet_name):
-            #print("Factory entry not found on Factory Worlds page and needs to be added: ", planet_name)
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:

@@ -66,5 +66,7 @@ None
 {{ availability }}
 {% else %}
 Can be found as a random starting pilot or in hiring halls. 
-{% endif -%}
-[[Category:Pilots]]
+{% endif %}
+
+[[Category:Test_Pilots]]
+[[Category:CHANGE_THIS_CATEGORY_MOTHERFUCKER]]
