@@ -70,7 +70,8 @@ def parse_pilot_json(file_path):
         "pilot_taurian",
         "pilot_comstar",
         "pilot_vehicle_crew",
-        "pilot_mechwarrior"
+        "pilot_mechwarrior",
+        "pilot_starter"
     }
 
     with open(file_path, 'r') as file:
@@ -105,7 +106,13 @@ def parse_pilot_json(file_path):
     pilot_tags = data.get("PilotTags", {}).get("items", [])
     tag_counter = 1
     for tag in pilot_tags:
-        if tag.startswith("pilot_") and tag not in excluded_pilot_tags:
+        if "pilot_starter" in tag:
+            pilot_details["availability"] = "Part of the <b>Original Adventurers</b> character origins starting option. Can also be found as a random starting pilot or in hiring halls."
+        elif "pilot_btateam" in tag:
+            pilot_details["availability"] = "Part of the <b>Pioneering Comrades</b> character origins starting option. Can also be found as a random starting pilot or in hiring halls."
+        elif "pilot_radio" in tag:
+            pilot_details["availability"] = "Part of the <b>Radio Crew</b> character origins starting option. Can also be found as a random starting pilot or in hiring halls."
+        elif tag.startswith("pilot_") and tag not in excluded_pilot_tags:
             formatted_tag = tag.replace("pilot_", "").capitalize()
             pilot_details[f"pilottag{tag_counter}"] = formatted_tag
             tag_counter += 1
