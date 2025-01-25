@@ -21,7 +21,7 @@ def render_pilot_entry(pilot):
 
     context = {
         "availability": pilot_info.get("availability"),
-        "callsign": pilot_info.get("callsign"), 
+        "callsign": callsign, 
         "firstname": pilot_info.get("firstname"),
         "lastname": pilot_info.get("lastname"),
         "age": pilot_info.get("age"),
