@@ -58,7 +58,14 @@ None
 
 ===Bonuses:===
 
+{% if custom_ability_name %}
+PASSIVE BONUS: '''{{ custom_ability_name }}'''
+
+{{custom_ability_details}}
+
+{% else %}
 None
+{% endif -%}
 
 
 ===Availability:===

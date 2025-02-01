@@ -21,6 +21,21 @@ def process_pilot_files(directories):
 
     return pilot_dict
 
+def lookup_unique_ability(ability):
+    abilifier_dir = bta_dir + "Abilifier/abilities/"
+    file_path = os.path.join(abilifier_dir, f"{ability}.json")
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+                name = data.get("Description", {}).get("Name")
+                details = data.get("Description", {}).get("Details")
+                return name, details 
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"Error reading {file_path}: {e}")
+    return None
+
+
 def parse_pilot_json(file_path):
     ability_mapping = {
         "AbilityDefG5": "multitarget",
@@ -99,6 +114,10 @@ def parse_pilot_json(file_path):
     # Check for abilities and add them to pilot details
     ability_def_names = data.get("abilityDefNames", [])
     for ability in ability_def_names:
+        if ability.startswith("AbilityDef") and ability not in ability_mapping:
+            custom_ability_name, custom_ability_details = lookup_unique_ability(ability)
+            pilot_details["custom_ability_name"] = custom_ability_name
+            pilot_details["custom_ability_details"] = custom_ability_details
         if ability in ability_mapping:
             pilot_details[ability_mapping[ability]] = ability_mapping[ability]
     

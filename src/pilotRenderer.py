@@ -33,7 +33,9 @@ def render_pilot_entry(pilot):
         "piloting": pilot_info.get("piloting"),
         "guts": pilot_info.get("guts"),
         "tactics": pilot_info.get("tactics"),
-        "pilottags": formatted_string
+        "pilottags": formatted_string,
+        "custom_ability_name": pilot_info.get("custom_ability_name"),
+        "custom_ability_details": pilot_info.get("custom_ability_details")
     }
 
     if "GITHUB_ACTIONS" in os.environ or "LOCAL_OVERRIDE" in os.environ:
