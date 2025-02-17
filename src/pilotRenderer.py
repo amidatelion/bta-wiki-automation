@@ -36,10 +36,7 @@ def render_pilot_entry(pilot):
         "pilottags": formatted_string,
         "custom_ability_name": pilot_info.get("custom_ability_name"),
         "custom_ability_details": pilot_info.get("custom_ability_details"),
-        "custom_affinity_name": pilot_info.get("custom_affinity_name"),
-        "custom_affinity_details": pilot_info.get("custom_affinity_details"),
-        "custom_affinity_missions": pilot_info.get("custom_affinity_missions"),
-        "custom_affinity_mech": pilot_info.get("custom_affinity_mech")
+        "custom_affinity_info": pilot_info.get("custom_affinity_dict")
     }
 
     if "GITHUB_ACTIONS" in os.environ or "LOCAL_OVERRIDE" in os.environ:

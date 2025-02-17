@@ -57,7 +57,7 @@ None
 
 
 ===Bonuses:===
-
+====Custom Abilities====
 {% if custom_ability_name %}
 '''Passive Bonus''': {{ custom_ability_name }}
 
@@ -67,12 +67,17 @@ None
 None
 {% endif -%}
 
-{% if custom_affinity_name %}
-'''Mech Affinity''': {{custom_affinity_mech}} - {{ custom_affinity_name }}
 
-(Enabled after {{custom_affinity_missions}} missions in the mech) 
+====Custom Affinties====
+{% if custom_affinity_info %}
+{% for key, value in custom_affinity_info.items() %}
+'''Mech Affinity''': {{ value.chassis_names }} - {{ key }}
 
-{{custom_affinity_details}}
+(Enabled after {{ value.missions_required }} missions in the mech)
+
+{{ value.description }}
+
+{% endfor %}
 
 {% else %}
 None

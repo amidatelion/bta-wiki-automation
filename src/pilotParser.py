@@ -37,6 +37,7 @@ def lookup_unique_ability(ability):
 
 def lookup_unique_affinity(affinity):
     abilifier_dir = bta_dir + "MechAffinity/AffinityDefs/"
+    
     for filename in os.listdir(abilifier_dir):
         if filename.endswith(".json"):  # Assuming files are JSON
             file_path = os.path.join(abilifier_dir, filename)
@@ -44,26 +45,17 @@ def lookup_unique_affinity(affinity):
             with open(file_path, 'r', encoding='utf-8') as file:
                 try:
                     data = json.load(file)
-                    #print(data)
-                    if data.get("affinityData", {}).get("tag") == affinity:
-                        print("missions:", data.get("affinityData", {}).get("affinityLevels", [{}])[0].get("missionsRequired", None))
-
-                    if data.get("affinityData", {}).get("tag") == affinity:
-                        affinity_chassis_names = data.get("affinityData", {}).get("chassisNames", None)
-                        affinity_missions = data.get("affinityData", {}).get("affinityLevels", [{}])[0].get("missionsRequired", None)
-                        affinity_name = data.get("affinityData", {}).get("affinityLevels", [{}])[0].get("levelName", None)
-                        affinity_description = data.get("affinityData", {}).get("affinityLevels", [{}])[0].get("decription", None)
-                        return affinity_chassis_names, affinity_missions, affinity_name, affinity_description
-
-                        """
-                        affinity_chassis_names = data.get("affinityData", {}).get("chassisNames")
-                        affinity_missions = data.get("affinityData", {}).get("affinityLevels[0]", {}).get("missionsRequired")
-                        affinity_name = data.get("affinityData", {}).get("affinityLevels[0]", {}).get("levelName", None)
-                        affinity_description = data.get("affinityData", {}).get("affinityLevels[0]", {}).get("description", None)
-                        print(affinity_chassis_names, affinity_missions, affinity_name, affinity_description)
-                        return affinity_chassis_names, affinity_missions, affinity_name, affinity_description
-                        """
-                        
+                    affinity_data = data.get("affinityData", {})
+                    
+                    if affinity_data.get("tag") == affinity:
+                        level_name = affinity_data.get("affinityLevels", [{}])[0].get("levelName")
+                        return {
+                            level_name: {
+                                "chassis_names": affinity_data.get("chassisNames"),
+                                "missions_required": affinity_data.get("affinityLevels", [{}])[0].get("missionsRequired"),
+                                "description": affinity_data.get("affinityLevels", [{}])[0].get("decription")
+                            }
+                        }
                 except json.JSONDecodeError:
                     print(f"Error reading JSON file: {filename}")
     
@@ -177,31 +169,29 @@ def parse_pilot_json(file_path):
     pilot_tags = data.get("PilotTags", {}).get("items", [])
     print(pilot_tags)
     
-    affinity_tag = None
+    affinity_tags = []
     for tag in pilot_tags:
         if tag.startswith("Affinity_"):
-            affinity_tag = tag
-            break
-            
-    print("Affinity Tag: ", affinity_tag)
-    if affinity_tag is not None:
-        #result = lookup_unique_affinity(affinity_tag)
-        #print("Result:", result)
-        affinity_chassis_names, affinity_missions, affinity_name, affinity_description = lookup_unique_affinity(affinity_tag)
-        if len(affinity_chassis_names) > 1:
-            affinity_chassis_names = [affinity_mech_mapping.get(chassis, "None") for chassis in affinity_chassis_names]
-            affinity_chassis_names = "/".join(map(str, affinity_chassis_names))
-        else:
-            affinity_chassis_names = affinity_chassis_names[0]
-            affinity_chassis_names = affinity_mech_mapping.get(affinity_chassis_names, "None")  
+            affinity_tags.append(tag)
 
-        if affinity_name:
-            pilot_details["custom_affinity_name"] = affinity_name
-            pilot_details["custom_affinity_details"] = affinity_description
-            pilot_details["custom_affinity_mech"] = affinity_chassis_names
-            pilot_details["custom_affinity_missions"] = affinity_missions
-            pilot_details["custom_affinity_mech"] = affinity_chassis_names
-    
+            
+    print("Affinity Tag: ", affinity_tags)
+    pilot_details["custom_affinity_dict"] = {}
+    if affinity_tags:
+        for affinity_tag in affinity_tags:
+            result = lookup_unique_affinity(affinity_tag)
+            if result:
+                pilot_details["custom_affinity_dict"].update(result)
+                
+                chassis_names = result[list(result.keys())[0]].get("chassis_names", [])
+                if len(chassis_names) > 1:
+                    chassis_names = [affinity_mech_mapping.get(chassis, "None") for chassis in chassis_names]
+                    chassis_names = "/".join(map(str, chassis_names))
+                else:
+                    chassis_names = affinity_mech_mapping.get(chassis_names[0], "None") if chassis_names else "None"
+                
+                result[list(result.keys())[0]]["chassis_names"] = chassis_names
+    print("Affinity Data:", pilot_details["custom_affinity_dict"])
 
     tag_counter = 1
     for tag in pilot_tags:
