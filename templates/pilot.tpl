@@ -59,9 +59,20 @@ None
 ===Bonuses:===
 
 {% if custom_ability_name %}
-PASSIVE BONUS: '''{{ custom_ability_name }}'''
+'''Passive Bonus''': {{ custom_ability_name }}
 
 {{custom_ability_details}}
+
+{% else %}
+None
+{% endif -%}
+
+{% if custom_affinity_name %}
+'''Mech Affinity''': {{custom_affinity_mech}} - {{ custom_affinity_name }}
+
+(Enabled after {{custom_affinity_missions}} missions in the mech) 
+
+{{custom_affinity_details}}
 
 {% else %}
 None
