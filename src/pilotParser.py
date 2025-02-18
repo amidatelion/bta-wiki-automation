@@ -167,15 +167,12 @@ def parse_pilot_json(file_path):
     
     # Process pilot tags
     pilot_tags = data.get("PilotTags", {}).get("items", [])
-    print(pilot_tags)
     
     affinity_tags = []
     for tag in pilot_tags:
         if tag.startswith("Affinity_"):
             affinity_tags.append(tag)
 
-            
-    print("Affinity Tag: ", affinity_tags)
     pilot_details["custom_affinity_dict"] = {}
     if affinity_tags:
         for affinity_tag in affinity_tags:
@@ -191,7 +188,6 @@ def parse_pilot_json(file_path):
                     chassis_names = affinity_mech_mapping.get(chassis_names[0], "None") if chassis_names else "None"
                 
                 result[list(result.keys())[0]]["chassis_names"] = chassis_names
-    print("Affinity Data:", pilot_details["custom_affinity_dict"])
 
     tag_counter = 1
     for tag in pilot_tags:
