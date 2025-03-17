@@ -7,7 +7,21 @@ import pilotParser
 from settings import *
 
 template = environment.get_template("pilot.tpl")
-#session, csrf_token = genUtilities.create_wiki_session()
+session, csrf_token = genUtilities.create_wiki_session()
+
+def check_pilot_page(session, callsign):
+    check_resp = session.post(api_url, data={
+	"action": "query",
+	"format": "json",
+	"prop": "revisions",
+	"titles": "Pilots",
+	"formatversion": "2",
+	"rvprop": "content",
+	"rvslots": "*"
+    })
+    data = check_resp.json()
+    data = json.dumps(data)
+    return callsign in data
 
 #busted, fix later
 def render_pilot_entry(pilot):
@@ -43,6 +57,8 @@ def render_pilot_entry(pilot):
         # Wiki page writing
         page_title = "Template:Pilot_" + callsign
         genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
+        if not check_pilot_page(session, callsign):
+            print("Pilot entry not found on List of Pilots page and needs to be added: ", callsign)
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:
