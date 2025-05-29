@@ -1,13 +1,13 @@
 |rowspan="1"|
-[[File:Vehicle_{{name}}.png|125px|border|center]]
+[[File:Vehicle_{{icon}}.png|125px|border|center]]
 
-'''[[{{name}}#{{uiname}}|{{name.upper()}}]]'''
+'''[[{{icon}}#{{uiname}}|{{name.upper()}}]]'''
 
 | {{uiname}}
 | {{tonnage}}
-| {{controllable}}
+| yes
 | {{propulsion}}
-| {{speed}}
+| lmao
 | {{enginetype}}
 | {{enginecore}}
 | {{armortotal}}
@@ -17,7 +17,13 @@
 | {{rightarmor}}
 | {{reararmor}}
 | {{turretarmor}}
-| {{gear}}
-| {{weapons}}
-| {{ammo}}
+| {% for gear in gears -%}
+[[{{ gear }}]]</br>
+{%- endfor %}
+| {% for weapon in weapons -%}
+[[ Weapons|{{weapon}} ]]</br>
+{%- endfor %}
+| {% for ammunition in ammunitions -%}
+[[ Ammunition|{{ ammunition }}]]</br>
+{%- endfor %}
 |-

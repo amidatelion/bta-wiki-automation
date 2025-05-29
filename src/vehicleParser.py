@@ -24,6 +24,11 @@ def remove_unwanted_components(data):
         filtered_data[filename] = filtered_components
     return filtered_data
 
+def extract_component_ids(data):
+    return {
+        'Components': [component['ComponentDefID'] for component in data.get('Components', [])]
+    }
+
 def extract_engine_size(components):
     for comp in components:
         comp_id = comp.get("ComponentDefID", "")
@@ -40,7 +45,6 @@ def extract_engine_type(components):
             return match.group(1)
     return None
 
-
 def process_vehicle_files(directory):
     vehicle_dict = {}
     for root, _, files in os.walk(directory):
@@ -56,8 +60,8 @@ def process_vehicle_files(directory):
                             "Components": {}
                         }
                         vehicle_dict[uiname]["Components"] = data["inventory"]
-                        
                         vehicle_dict[uiname] = remove_unwanted_components(vehicle_dict[uiname])
+                        vehicle_dict[uiname] = extract_component_ids(vehicle_dict[uiname])
                         chassisfilename = data["ChassisID"] + ".json"
                         #print(chassisfilename)
                         
@@ -87,10 +91,9 @@ def process_vehicle_files(directory):
                         
                         vehicle_dict[uiname]["CoreSize"] = extract_engine_size(data["inventory"])
                         vehicle_dict[uiname]["CoreType"] = extract_engine_type(data["inventory"])
-                        
+                        vehicle_dict[uiname]["Icon"] = data["Description"]["Icon"]                     
 
-                        
-    pp(vehicle_dict)
+    #pp(vehicle_dict)
     return vehicle_dict
 
 if __name__ == "__main__":
