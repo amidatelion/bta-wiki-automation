@@ -12,7 +12,7 @@ template = environment.get_template("vehicle.tpl")
 if os.getenv("WIKI_USER") and os.getenv("WIKI_PASS"):
     session, csrf_token = genUtilities.create_wiki_session()
 
-def render_vehicleentry(vehicle, components, tonnage, propulsion, armorvalues, totalarmor, totalstructure, coresize, coretype, icon):
+def render_vehicleentry(vehicle, components, tonnage, propulsion, armorvalues, totalarmor, totalstructure, coresize, coretype, speed, icon):
     
     vehicle_name = vehicle
     vehicle_file = vehicle_name.replace("/", "_")
@@ -50,6 +50,7 @@ def render_vehicleentry(vehicle, components, tonnage, propulsion, armorvalues, t
         "uiname": vehicle_name,
         "tonnage": tonnage,
         "propulsion": propulsion,
+        "speed": speed,
         "enginetype": coretype,
         "enginecore": coresize,
         "armortotal": totalarmor,
@@ -82,4 +83,4 @@ if __name__ == "__main__":
     #pp(results)
     for vehicle,items in results.items():
         #print("The planet ", planet, " is owned by ", items.get('owner'), "and with reputation ", items.get('rep'), " you can buy ", items.get('items'))
-        render_vehicleentry(vehicle, items.get("Components"), items.get("Tonnage"), items.get("Propulsion"), items.get("ArmorValues"), items.get("TotalArmor"), items.get("TotalStructure"), items.get("CoreSize"), items.get("CoreType"), items.get("Icon"))   
+        render_vehicleentry(vehicle, items.get("Components"), items.get("Tonnage"), items.get("Propulsion"), items.get("ArmorValues"), items.get("TotalArmor"), items.get("TotalStructure"), items.get("CoreSize"), items.get("CoreType"), items.get("Speed"), items.get("Icon"))   
