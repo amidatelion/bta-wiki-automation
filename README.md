@@ -15,8 +15,9 @@ Once the templates are inserted, they automatically update and can be forced to 
 # Local development
 To test locally (that is to say, only write out .wiki files), nothing needs to be done. This is the default to avoid fucky updates going out. Once written out to the various files you can inspect them yourself and/or write them to a test page on the wiki to make sure they work right. Don't forget to `rm *.wiki` when you're done (the .gitignore doesn't let them be uploaded, but its a lot of clutter)
 
-To post from you local for whatever reason, you need to export a valid WIKI_USER and WIKI_PASS and also export LOCAL_OVERRIDE=true. This force the scripts to post to the wiki. 
+To post from your local for whatever reason, you need to export a valid WIKI_USER and WIKI_PASS and also export LOCAL_OVERRIDE=true. This force the scripts to post to the wiki. The WIKI_USER must be in `Username@botname` format. Be sure to use a SEPARATE bot from automation that exists in the main BTA repo to minimize the chance of us getting owned. 
 
 # Pages to update
 - [Faction Stores](https://www.bta3062.com/index.php?title=Faction_Stores)
 - [Factories](https://www.bta3062.com/index.php?title=Factory_Worlds)
+- [Full List of Vehicles](https://www.bta3062.com/index.php?title=Full_List_of_Vehicles)
