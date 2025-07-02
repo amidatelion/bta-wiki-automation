@@ -10,6 +10,22 @@ from settings import *
 template = environment.get_template("factionStore.tpl")
 session, csrf_token = genUtilities.create_wiki_session()
 
+def check_faction_page(session, faction):
+    faction_url = faction.replace(" ", "_")
+    check_resp = session.post(api_url, data={
+	"action": "query",
+	"format": "json",
+	"prop": "revisions",
+	"titles": "Faction_Stores",
+	"formatversion": "2",
+	"rvprop": "content",
+	"rvslots": "*"
+    })
+    data = check_resp.json()
+    data = json.dumps(data)
+    return faction_url in data
+
+
 def render_factionstore(faction, items):
     faction_name = faction[:-5]
     results_filename = faction_name+"_store_Table.wiki"
@@ -71,7 +87,10 @@ def render_factionstore(faction, items):
     if "GITHUB_ACTIONS" in os.environ or "LOCAL_OVERRIDE" in os.environ:
         # Wiki page writing
         page_title = "Template:FS" + faction_name
+        print(f"posting to wiki: Faction store for {faction_name}")
         genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
+        if not check_faction_page(session, faction_name):
+            print("Faction entry not found on Factions page and needs to be added: ", faction_name)
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:
