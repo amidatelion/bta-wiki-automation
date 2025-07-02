@@ -48,6 +48,14 @@ def create_wiki_session():
 
     return session, csrf_token
 
+def fetch_csrf_token(session):
+    csrf_token_resp = session.get(api_url, params={
+        "action": "query",
+        "meta": "tokens",
+        "format": "json"
+    })
+    return csrf_token_resp.json()["query"]["tokens"]["csrftoken"]
+
 def post_to_wiki(session, csrf_token, page_title, page_content):
     # Step 4: Make the POST request to edit the page
     edit_resp = session.post(api_url, data={
@@ -61,6 +69,23 @@ def post_to_wiki(session, csrf_token, page_title, page_content):
     # Check if the edit was successful
     if edit_resp.json().get("edit", {}).get("result") == "Success":
         return True
+    elif edit_resp.json().get("error", {}).get("code") == "badtoken":
+        print("Invalid CSRF token. Refreshing and retrying once...")
+
+        csrf_token = fetch_csrf_token(session)
+        edit_resp = session.post(api_url, data={
+            "action": "edit",
+            "title": page_title,
+            "text": page_content,
+            "token": csrf_token,
+            "format": "json"
+        })
+
+        if edit_resp.json().get("edit", {}).get("result") == "Success":
+            return True
+        else:
+            print(f"Failed to edit page '{page_title}':", edit_resp.json())
+            return False
     else:
         print(f"Failed to edit page '{page_title}':", edit_resp.json())
         return False
