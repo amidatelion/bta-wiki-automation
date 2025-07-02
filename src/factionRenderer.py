@@ -90,7 +90,7 @@ def render_factionstore(faction, items):
         print(f"posting to wiki: Faction store for {faction_name}")
         genUtilities.post_to_wiki(session, csrf_token, page_title, template.render(context))
         if not check_faction_page(session, faction_name):
-            print("Faction entry not found on Factions page and needs to be added: ", faction_name)
+            print("Faction entry not found on Factions Store page and needs to be added: ", faction_name)
     else:
         # Local file writing
         with open(results_filename, mode="w", encoding="utf-8") as results:
