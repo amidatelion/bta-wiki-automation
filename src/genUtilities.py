@@ -23,6 +23,11 @@ def create_wiki_session():
         "format": "json"
     })
 
+    print(f"Status code: {login_token_resp.status_code}")
+    print(f"Content-Type: {login_token_resp.headers.get('Content-Type')}")
+    print("Raw response:")
+    print(login_token_resp.text)
+
     login_token = login_token_resp.json()["query"]["tokens"]["logintoken"]
 
     # Step 2: Log in to the MediaWiki API
